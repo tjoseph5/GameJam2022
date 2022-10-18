@@ -4,10 +4,27 @@ using UnityEngine;
 
 public class AudioLoudnessDetection : MonoBehaviour
 {
+    public static AudioLoudnessDetection instance;
+
     public int sampleWindow = 64;
     private AudioClip microphoneClip;
 
     public float thresholdHolder;
+
+    [HideInInspector] public string publicMicrophoneName;
+
+    void Awake()
+    {
+        if(instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     void Start()
     {
@@ -19,6 +36,7 @@ public class AudioLoudnessDetection : MonoBehaviour
         string microphoneName = Microphone.devices[0];
         microphoneClip = Microphone.Start(microphoneName, true, 20, AudioSettings.outputSampleRate);
 
+        publicMicrophoneName = microphoneName;
         Debug.Log(microphoneName);
     }
 
