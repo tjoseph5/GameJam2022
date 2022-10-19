@@ -26,7 +26,7 @@ public class ScaleFromMicrophone : MonoBehaviour
         else if (loudness > threshold)
         {
             Debug.Log("SCREAMING DETECTED");
-            Debug.Log(loudness);
+            //Debug.Log(loudness);
         }
 
         transform.localScale = Vector2.Lerp(minSclae, maxSclae, loudness);

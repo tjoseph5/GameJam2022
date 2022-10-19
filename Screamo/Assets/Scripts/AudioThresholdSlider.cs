@@ -8,13 +8,13 @@ public class AudioThresholdSlider : MonoBehaviour
 {
     public static AudioThresholdSlider instance;
 
-    [SerializeField] AudioLoudnessDetection detector;
+    //[SerializeField] AudioLoudnessDetection detector;
     Slider audioThresholdAdjustor;
     Slider audioLoudnessMeter;
 
-    float loudness;
+    [HideInInspector] public float loudness;
 
-    public float threshold;
+    [HideInInspector] public float threshold;
 
     public TextMeshProUGUI recordingDeviceName;
 
@@ -23,7 +23,6 @@ public class AudioThresholdSlider : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -67,12 +66,12 @@ public class AudioThresholdSlider : MonoBehaviour
     {
         threshold = audioThresholdAdjustor.value;
 
-        if (detector.thresholdHolder != threshold)
+        if (AudioLoudnessDetection.instance.thresholdHolder != threshold)
         {
-            detector.thresholdHolder = threshold;
+            AudioLoudnessDetection.instance.thresholdHolder = threshold;
         }
 
-        loudness = detector.GetLoudnessFromMicrophone() * 100;
+        loudness = AudioLoudnessDetection.instance.GetLoudnessFromMicrophone() * 100;
         audioLoudnessMeter.value = loudness;
     }
 }

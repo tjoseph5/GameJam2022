@@ -24,6 +24,8 @@ public class AudioLoudnessDetection : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        Application.targetFrameRate = 60;
     }
 
     void Start()
