@@ -10,7 +10,7 @@ public class PlayerMovement : MonoBehaviour
 
     Vector2 movementVector;
 
-    public float moveSpeed;
+    [HideInInspector] public float moveSpeed;
     public float slowSpeed;
     public float fastSpeed;
     public float jumpForce;
@@ -24,9 +24,25 @@ public class PlayerMovement : MonoBehaviour
 
     public bool facingRight = true;
 
+    Animator anim;
+
+    private string currentState; //used in ChangeAnimationState function. Checks which animator state is currently active
+
+    //Static strings used specifically for referencing player animator states
+    const string playerIdle = "P_Idle";
+    const string playerJump = "P_Jump";
+    const string playerWalk = "P_Walk";
+    const string playerRun = "P_Run";
+    const string playerDeath = "P_Death";
+    //const string playerFalling = "P_Falling";
+
+    const string playerSprint = "Player_Sprint";
+
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        anim = this.transform.GetChild(0).GetComponent<Animator>();
     }
 
     void Start()
@@ -36,7 +52,6 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-
         #region Movement Stuff
         if (!isJumping)
         {
@@ -67,6 +82,32 @@ public class PlayerMovement : MonoBehaviour
         {
             moveSpeed = fastSpeed;
         }
+
+        #region Animation Stuff
+        if(!isJumping)
+        {
+            if(movementVector.x != 0)
+            {
+                switch (UniversalScreamChecker.instance.isScreaming)
+                {
+                    case true:
+                        ChangeAnimationState(playerRun);
+                        break;
+                    case false:
+                        ChangeAnimationState(playerWalk);
+                        break;
+                }
+            }
+            else if(movementVector.x == 0)
+            {
+                ChangeAnimationState(playerIdle);
+            }
+        }
+        else if (isJumping)
+        {
+            ChangeAnimationState(playerJump);
+        }
+        #endregion
     }
 
     void FixedUpdate()
@@ -88,6 +129,18 @@ public class PlayerMovement : MonoBehaviour
     {
         facingRight = !facingRight;
         transform.Rotate(0, 180, 0);
+    }
+
+    public void ChangeAnimationState(string newState) //Allows animator to change between states without needing parameters or a lot of transitions within the animator controller
+    {
+        //prevents the same animations from interrupting itself
+        if (currentState == newState) return;
+
+        //plays the animation
+        anim.Play(newState);
+
+        //updates the currentState string
+        currentState = newState;
     }
 
     private void OnTriggerEnter2D(Collider2D col)

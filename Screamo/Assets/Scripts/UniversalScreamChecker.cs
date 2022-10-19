@@ -13,6 +13,8 @@ public class UniversalScreamChecker : MonoBehaviour
 
     int sceneID;
 
+    public float animationSpeedUp;
+
     void Awake()
     {
         if (instance == null)
@@ -61,7 +63,7 @@ public class UniversalScreamChecker : MonoBehaviour
         {
             foreach(Animator animator in animators)
             {
-                animator.speed = 10;
+                animator.speed = 1 * animationSpeedUp;
             }
         }
         else
