@@ -169,6 +169,54 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""P_UI"",
+            ""id"": ""383d56db-8c49-442f-a797-cf7bfad9f862"",
+            ""actions"": [
+                {
+                    ""name"": ""Enter"",
+                    ""type"": ""Button"",
+                    ""id"": ""e338528a-135f-4c97-b7eb-8ea8869b9565"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Exit"",
+                    ""type"": ""Button"",
+                    ""id"": ""9017d3f3-67a1-4c39-a3f8-c7e87158a855"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""7be4493c-080c-4bb1-a1ff-0f6f45ed2c26"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Enter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ba0eb830-934b-463e-83f0-b49fa0666215"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Exit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -189,6 +237,10 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
+        // P_UI
+        m_P_UI = asset.FindActionMap("P_UI", throwIfNotFound: true);
+        m_P_UI_Enter = m_P_UI.FindAction("Enter", throwIfNotFound: true);
+        m_P_UI_Exit = m_P_UI.FindAction("Exit", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -285,6 +337,47 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         }
     }
     public PlayerActions @Player => new PlayerActions(this);
+
+    // P_UI
+    private readonly InputActionMap m_P_UI;
+    private IP_UIActions m_P_UIActionsCallbackInterface;
+    private readonly InputAction m_P_UI_Enter;
+    private readonly InputAction m_P_UI_Exit;
+    public struct P_UIActions
+    {
+        private @PlayerControls m_Wrapper;
+        public P_UIActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Enter => m_Wrapper.m_P_UI_Enter;
+        public InputAction @Exit => m_Wrapper.m_P_UI_Exit;
+        public InputActionMap Get() { return m_Wrapper.m_P_UI; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(P_UIActions set) { return set.Get(); }
+        public void SetCallbacks(IP_UIActions instance)
+        {
+            if (m_Wrapper.m_P_UIActionsCallbackInterface != null)
+            {
+                @Enter.started -= m_Wrapper.m_P_UIActionsCallbackInterface.OnEnter;
+                @Enter.performed -= m_Wrapper.m_P_UIActionsCallbackInterface.OnEnter;
+                @Enter.canceled -= m_Wrapper.m_P_UIActionsCallbackInterface.OnEnter;
+                @Exit.started -= m_Wrapper.m_P_UIActionsCallbackInterface.OnExit;
+                @Exit.performed -= m_Wrapper.m_P_UIActionsCallbackInterface.OnExit;
+                @Exit.canceled -= m_Wrapper.m_P_UIActionsCallbackInterface.OnExit;
+            }
+            m_Wrapper.m_P_UIActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Enter.started += instance.OnEnter;
+                @Enter.performed += instance.OnEnter;
+                @Enter.canceled += instance.OnEnter;
+                @Exit.started += instance.OnExit;
+                @Exit.performed += instance.OnExit;
+                @Exit.canceled += instance.OnExit;
+            }
+        }
+    }
+    public P_UIActions @P_UI => new P_UIActions(this);
     private int m_KeyboardSchemeIndex = -1;
     public InputControlScheme KeyboardScheme
     {
@@ -298,5 +391,10 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
+    }
+    public interface IP_UIActions
+    {
+        void OnEnter(InputAction.CallbackContext context);
+        void OnExit(InputAction.CallbackContext context);
     }
 }

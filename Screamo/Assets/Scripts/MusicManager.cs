@@ -10,6 +10,7 @@ public class MusicManager : MonoBehaviour
     public static MusicManager instance;
 
     public bool heavyCanPlay;
+    [Range(0,1)] public float volume;
 
     void Awake()
     {
@@ -20,7 +21,7 @@ public class MusicManager : MonoBehaviour
             calmMusic = this.transform.GetChild(0).GetComponent<AudioSource>();
             heavyMusic = this.transform.GetChild(1).GetComponent<AudioSource>();
 
-            //DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -34,7 +35,7 @@ public class MusicManager : MonoBehaviour
     {
         if (UniversalScreamChecker.instance.isScreaming)
         {
-            calmMusic.volume -= Time.deltaTime * 2;
+            calmMusic.volume -= Time.deltaTime * 4;
 
             if (calmMusic.volume < 0)
             {
@@ -46,19 +47,25 @@ public class MusicManager : MonoBehaviour
                 heavyMusic.Play();
                 heavyMusic.time = calmMusic.time;
             }
-            heavyMusic.volume = 1;
+            if (heavyMusic.volume < volume)
+            {
+                heavyMusic.volume += Time.deltaTime * 4;
+            }
             heavyCanPlay = true;
         }
         else
         {
-            heavyMusic.volume -= Time.deltaTime * 2;
+            heavyMusic.volume -= Time.deltaTime * 4;
 
             if (heavyMusic.volume < 0)
             {
                 heavyMusic.volume = 0;
             }
 
-            calmMusic.volume = 1;
+            if(calmMusic.volume < volume)
+            {
+                calmMusic.volume += Time.deltaTime * 4;
+            }
         }
     }
 }

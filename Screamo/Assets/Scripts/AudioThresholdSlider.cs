@@ -17,6 +17,7 @@ public class AudioThresholdSlider : MonoBehaviour
     [HideInInspector] public float threshold;
 
     public TextMeshProUGUI recordingDeviceName;
+    public float sensibility;
 
     void Awake()
     {
@@ -54,11 +55,11 @@ public class AudioThresholdSlider : MonoBehaviour
 
         if (Microphone.devices[0] != null)
         {
-            recordingDeviceName.text = "Recording Device: " + AudioLoudnessDetection.instance.publicMicrophoneName;
+            recordingDeviceName.text = AudioLoudnessDetection.instance.publicMicrophoneName;
         }
         else if (Microphone.devices[0] == null)
         {
-            recordingDeviceName.text = "Unable to find microphone!";
+            //recordingDeviceName.text = "Unable to find microphone!";
         }
     }
 
@@ -71,7 +72,7 @@ public class AudioThresholdSlider : MonoBehaviour
             AudioLoudnessDetection.instance.thresholdHolder = threshold;
         }
 
-        loudness = AudioLoudnessDetection.instance.GetLoudnessFromMicrophone() * 100;
+        loudness = Mathf.Abs(AudioLoudnessDetection.instance.GetLoudnessFromMicrophone() * sensibility);
         audioLoudnessMeter.value = loudness;
     }
 }

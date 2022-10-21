@@ -11,7 +11,7 @@ public class UniversalScreamChecker : MonoBehaviour
 
     public List<Animator> animators = new List<Animator>();
 
-    int sceneID;
+    //int sceneID;
 
     public float animationSpeedUp;
 
@@ -28,7 +28,8 @@ public class UniversalScreamChecker : MonoBehaviour
     }
     void Start()
     {
-        sceneID = SceneManager.GetActiveScene().buildIndex;
+        //sceneID = SceneManager.GetActiveScene().buildIndex;
+        animators.Clear();
     }
 
     void Update()
@@ -52,25 +53,34 @@ public class UniversalScreamChecker : MonoBehaviour
             }
         }
 
-        if(sceneID != SceneManager.GetActiveScene().buildIndex)
+        /*if(sceneID != SceneManager.GetActiveScene().buildIndex)
         {
             animators.Clear();
-            //animators.Capacity = GameObject.FindObjectsOfType<Animator>().Length;
             sceneID = SceneManager.GetActiveScene().buildIndex;
-        }
+        }*/
 
         if (isScreaming)
         {
             foreach(Animator animator in animators)
             {
-                animator.speed = 1 * animationSpeedUp;
+                animator.speed += Time.deltaTime * 4;
+
+                if(animator.speed > animationSpeedUp)
+                {
+                    animator.speed = animationSpeedUp;
+                }
             }
         }
         else
         {
             foreach (Animator animator in animators)
             {
-                animator.speed = 1;
+                animator.speed -= Time.deltaTime * 4;
+
+                if(animator.speed < 1)
+                {
+                    animator.speed = 1;
+                }
             }
         }
     }

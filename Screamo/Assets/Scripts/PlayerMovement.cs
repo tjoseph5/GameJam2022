@@ -5,12 +5,14 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public static PlayerMovement instance;
+
     [SerializeField] InputActionReference movementControl;
     [SerializeField] InputActionReference jumpControl;
 
     Vector2 movementVector;
 
-    [HideInInspector] public float moveSpeed;
+    /*[HideInInspector]*/ public float moveSpeed;
     public float slowSpeed;
     public float fastSpeed;
     public float jumpForce;
@@ -34,13 +36,15 @@ public class PlayerMovement : MonoBehaviour
     const string playerWalk = "P_Walk";
     const string playerRun = "P_Run";
     const string playerDeath = "P_Death";
-    //const string playerFalling = "P_Falling";
-
-    const string playerSprint = "Player_Sprint";
+    const string playerVictory = "P_Victory";
 
 
     void Awake()
     {
+        if(instance == null)
+        {
+            instance = this;
+        }
         rb = GetComponent<Rigidbody2D>();
         anim = this.transform.GetChild(0).GetComponent<Animator>();
     }
@@ -64,11 +68,11 @@ public class PlayerMovement : MonoBehaviour
         movementVector = new Vector2(Mathf.Round(movementControl.action.ReadValue<Vector2>().x), Mathf.Round(movementControl.action.ReadValue<Vector2>().y));
 
         //rotate if facing the wrong way
-        if (movementVector.x > 0 && !facingRight && !isJumping)
+        if (movementVector.x > 0 && !facingRight)
         {
             Flip();
         }
-        else if (movementVector.x < 0 && facingRight && !isJumping)
+        else if (movementVector.x < 0 && facingRight)
         {
             Flip();
         }
@@ -76,36 +80,65 @@ public class PlayerMovement : MonoBehaviour
 
         if (!UniversalScreamChecker.instance.isScreaming)
         {
-            moveSpeed = slowSpeed;
+            moveSpeed -= Time.deltaTime * 10;
+
+            if(moveSpeed < slowSpeed)
+            {
+                moveSpeed = slowSpeed;
+            }
         }
         else
         {
-            moveSpeed = fastSpeed;
+            moveSpeed += Time.deltaTime * 10;
+
+            if (moveSpeed > fastSpeed)
+            {
+                moveSpeed = fastSpeed;
+            }
         }
 
         #region Animation Stuff
-        if(!isJumping)
+        if (canControl)
         {
-            if(movementVector.x != 0)
+            if (!isJumping)
             {
-                switch (UniversalScreamChecker.instance.isScreaming)
+                if (movementVector.x != 0)
                 {
-                    case true:
-                        ChangeAnimationState(playerRun);
-                        break;
-                    case false:
-                        ChangeAnimationState(playerWalk);
-                        break;
+                    switch (UniversalScreamChecker.instance.isScreaming)
+                    {
+                        case true:
+                            if (anim.speed > UniversalScreamChecker.instance.animationSpeedUp / 2)
+                            {
+                                ChangeAnimationState(playerRun);
+
+                                if (moveSpeed < fastSpeed / 2)
+                                {
+                                    //moveSpeed = fastSpeed / 2;
+                                }
+                            }
+                            break;
+                        case false:
+                            if (anim.speed < UniversalScreamChecker.instance.animationSpeedUp / 2 || anim.speed == 1)
+                            {
+                                ChangeAnimationState(playerWalk);
+
+                                if (moveSpeed > slowSpeed * 2)
+                                {
+                                    moveSpeed = slowSpeed * 2;
+                                }
+                            }
+                            break;
+                    }
+                }
+                else if (movementVector.x == 0)
+                {
+                    ChangeAnimationState(playerIdle);
                 }
             }
-            else if(movementVector.x == 0)
+            else if (isJumping)
             {
-                ChangeAnimationState(playerIdle);
+                ChangeAnimationState(playerJump);
             }
-        }
-        else if (isJumping)
-        {
-            ChangeAnimationState(playerJump);
         }
         #endregion
     }
@@ -127,8 +160,11 @@ public class PlayerMovement : MonoBehaviour
 
     void Flip() //Function that is called whenever the player change X axis for movementVector. Also resets sprinting variables
     {
-        facingRight = !facingRight;
-        transform.Rotate(0, 180, 0);
+        if (canControl)
+        {
+            facingRight = !facingRight;
+            transform.Rotate(0, 180, 0);
+        }
     }
 
     public void ChangeAnimationState(string newState) //Allows animator to change between states without needing parameters or a lot of transitions within the animator controller
@@ -149,6 +185,16 @@ public class PlayerMovement : MonoBehaviour
         {
             isJumping = false;
         }
+
+        if (col.tag == "Bad")
+        {
+            Death();
+        }
+
+        if(col.tag == "Goal")
+        {
+            //Victory();
+        }
     }
 
     private void OnTriggerExit2D(Collider2D col)
@@ -157,6 +203,27 @@ public class PlayerMovement : MonoBehaviour
         {
             isJumping = true;
         }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.collider.tag == "Bad")
+        {
+            Death();
+        }
+    }
+    public void Death()
+    {
+        canControl = false;
+        rb.velocity = new Vector2(0, rb.velocity.y);
+        ChangeAnimationState(playerDeath);
+    }
+    public void Victory()
+    {
+        canControl = false;
+        rb.bodyType = RigidbodyType2D.Static;
+        ChangeAnimationState(playerVictory);
+        GameObject.FindObjectOfType<Timer>().levelComplete = true;
     }
 
     #region On Enable/Disable

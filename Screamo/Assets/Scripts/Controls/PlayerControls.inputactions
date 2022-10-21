@@ -147,6 +147,54 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "P_UI",
+            "id": "383d56db-8c49-442f-a797-cf7bfad9f862",
+            "actions": [
+                {
+                    "name": "Enter",
+                    "type": "Button",
+                    "id": "e338528a-135f-4c97-b7eb-8ea8869b9565",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Exit",
+                    "type": "Button",
+                    "id": "9017d3f3-67a1-4c39-a3f8-c7e87158a855",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "7be4493c-080c-4bb1-a1ff-0f6f45ed2c26",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Enter",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ba0eb830-934b-463e-83f0-b49fa0666215",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Exit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [
