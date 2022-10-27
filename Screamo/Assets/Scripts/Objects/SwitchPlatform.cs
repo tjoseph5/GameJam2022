@@ -68,16 +68,16 @@ public class SwitchPlatform : MonoBehaviour
             case true:
                 foreach(Animator anim in childBlockSprites)
                 {
-                    ChangeAnimationState(dottedBlock);
-                    anim.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+                    ChangeAnimationState(solidBlock);
+                    anim.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
                 }
                 break;
 
             case false:
                 foreach (Animator anim in childBlockSprites)
                 {
-                    ChangeAnimationState(solidBlock);
-                    anim.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+                    ChangeAnimationState(dottedBlock);
+                    anim.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
                 }
                 break;
         }

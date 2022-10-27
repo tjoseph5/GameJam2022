@@ -9,7 +9,7 @@ public class Timer : MonoBehaviour
 
     public float setTimer;
 
-    public int displayTimer;
+    [HideInInspector]public int displayTimer;
 
     [HideInInspector] public bool levelComplete;
 

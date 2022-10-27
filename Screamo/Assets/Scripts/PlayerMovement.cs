@@ -36,7 +36,8 @@ public class PlayerMovement : MonoBehaviour
     const string playerWalk = "P_Walk";
     const string playerRun = "P_Run";
     const string playerDeath = "P_Death";
-    const string playerVictory = "P_Victory";
+    const string playerFall2 = "P_Falling2";
+    public const string playerVictory = "P_Victory";
 
 
     void Awake()
@@ -186,14 +187,10 @@ public class PlayerMovement : MonoBehaviour
             isJumping = false;
         }
 
+
         if (col.tag == "Bad")
         {
             Death();
-        }
-
-        if(col.tag == "Goal")
-        {
-            //Victory();
         }
     }
 
@@ -211,6 +208,19 @@ public class PlayerMovement : MonoBehaviour
         {
             Death();
         }
+
+        if (collision.collider.tag == "Goal")
+        {
+            if (!anim.GetCurrentAnimatorStateInfo(0).IsName(playerDeath))
+            {
+                Victory();
+
+                if (collision.collider.GetComponent<SpoolGoal>())
+                {
+                    collision.collider.GetComponent<SpoolGoal>().ChangeAnimationState("Spool Collected");
+                }
+            }
+        }
     }
     public void Death()
     {
@@ -222,8 +232,25 @@ public class PlayerMovement : MonoBehaviour
     {
         canControl = false;
         rb.bodyType = RigidbodyType2D.Static;
-        ChangeAnimationState(playerVictory);
+        if (isJumping)
+        {
+            ChangeAnimationState(playerFall2);
+        }
+        else if (!isJumping)
+        {
+            ChangeAnimationState(playerIdle);
+        }
+
         GameObject.FindObjectOfType<Timer>().levelComplete = true;
+
+        foreach(GameObject go in GameObject.FindGameObjectsWithTag("Bad"))
+        {
+            if (go.GetComponent<Rigidbody2D>())
+            {
+                go.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+                go.tag = "Untagged";
+            }
+        }
     }
 
     #region On Enable/Disable

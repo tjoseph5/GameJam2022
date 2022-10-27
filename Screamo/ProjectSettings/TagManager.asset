@@ -8,6 +8,7 @@ TagManager:
   - Event Trigger
   - Bad
   - Goal
+  - LMC
   layers:
   - Default
   - TransparentFX
@@ -15,8 +16,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - Non Trigger
+  - Missiles
   - 
   - 
   - 

@@ -9,6 +9,30 @@ EditorBuildSettings:
     path: Assets/Scenes/Menus/Title Scene.unity
     guid: 56d9a19527105b242a5d32dcb85559e6
   - enabled: 1
-    path: Assets/Scenes/Test Scenes/SampleScene.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
+    path: Assets/Scenes/Levels/Lvl 1.unity
+    guid: 516bc5d8134091940b163be0836691be
+  - enabled: 1
+    path: Assets/Scenes/Levels/Lvl 2.unity
+    guid: c05b899ae857b6a4388c373dcdf10e93
+  - enabled: 1
+    path: Assets/Scenes/Levels/Lvl 3.unity
+    guid: 52548936d2594d944b208cbfb1c75f52
+  - enabled: 1
+    path: Assets/Scenes/Levels/Lvl 4.unity
+    guid: 8b55067abfe7a9a47803d385d32d75a1
+  - enabled: 1
+    path: Assets/Scenes/Levels/Lvl 5.unity
+    guid: 2fc72c7ed90eeb04ea10e97ae82bee7e
+  - enabled: 1
+    path: Assets/Scenes/Levels/Lvl 6.unity
+    guid: 4eda74ca7cc3dc14e8fb4e0d344a103f
+  - enabled: 1
+    path: Assets/Scenes/Levels/Lvl 7.unity
+    guid: cf8a1747510593041910e796a828d904
+  - enabled: 1
+    path: Assets/Scenes/Levels/Lvl 8.unity
+    guid: 9d549582cf35fb443aae84c5bd78224b
+  - enabled: 1
+    path: Assets/Scenes/Menus/Credits.unity
+    guid: a232de2c8aabf5b4a9a3cb9d8fe05254
   m_configObjects: {}

@@ -12,7 +12,7 @@ public class MusicManager : MonoBehaviour
     public bool heavyCanPlay;
     [Range(0,1)] public float volume;
 
-    void Awake()
+    void Start()
     {
         if (instance == null)
         {
@@ -23,12 +23,12 @@ public class MusicManager : MonoBehaviour
 
             DontDestroyOnLoad(gameObject);
         }
-        else
+        else if(instance != null)
         {
             Destroy(gameObject);
         }
 
-        heavyMusic.volume = 0;
+        GameObject.Find("Heavy").gameObject.GetComponent<AudioSource>().volume = 0;
     }
 
     void Update()

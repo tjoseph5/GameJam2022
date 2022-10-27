@@ -29,7 +29,7 @@ public class UniversalScreamChecker : MonoBehaviour
     void Start()
     {
         //sceneID = SceneManager.GetActiveScene().buildIndex;
-        animators.Clear();
+        //animators.Clear();
     }
 
     void Update()

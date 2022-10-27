@@ -183,7 +183,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 100
+  m_fontSize: 80
   m_fontSizeBase: 100
   m_fontWeight: 400
   m_enableAutoSizing: 0
@@ -461,10 +461,10 @@ GameObject:
   - component: {fileID: 5239054789011577811}
   - component: {fileID: 5239054789011577808}
   - component: {fileID: 5239054789011577809}
-  - component: {fileID: 5239054789011577813}
+  - component: {fileID: 7200727383188552893}
   m_Layer: 5
   m_Name: Loudness Meter Canvas
-  m_TagString: Untagged
+  m_TagString: LMC
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -555,7 +555,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &5239054789011577813
+--- !u!114 &7200727383188552893
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

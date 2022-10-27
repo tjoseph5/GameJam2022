@@ -11,9 +11,19 @@ public class SpeakerAirFlow : MonoBehaviour
     public float windStrength; //strength of each windzone.
 
     float windHolder;
+
+    Animator anim;
+
+    private string currentState; //used in ChangeAnimationState function. Checks which animator state is currently active
+
+    //Static strings used specifically for referencing player animator states
+    const string boomBox = "Boom Box";
+    const string soundWaves = "Sound Waves";
+
     private void Start()
     {
         windHolder = windStrength;
+        anim = this.transform.GetComponentInParent<Animator>();
     }
 
     private void Update()
@@ -23,10 +33,12 @@ public class SpeakerAirFlow : MonoBehaviour
         if (!UniversalScreamChecker.instance.isScreaming)
         {
             windStrength = 0;
+            ChangeAnimationState(boomBox);
         }
         else
         {
             windStrength = windHolder;
+            ChangeAnimationState(soundWaves);
         }
     }
 
@@ -64,5 +76,16 @@ public class SpeakerAirFlow : MonoBehaviour
                 rigid.AddForce(windDirection * windStrength);
             }
         }
+    }
+    public void ChangeAnimationState(string newState) //Allows animator to change between states without needing parameters or a lot of transitions within the animator controller
+    {
+        //prevents the same animations from interrupting itself
+        if (currentState == newState) return;
+
+        //plays the animation
+        anim.Play(newState);
+
+        //updates the currentState string
+        currentState = newState;
     }
 }
